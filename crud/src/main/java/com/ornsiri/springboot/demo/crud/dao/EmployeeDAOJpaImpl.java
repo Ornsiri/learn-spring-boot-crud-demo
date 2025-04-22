@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,5 +26,24 @@ public class EmployeeDAOJpaImpl implements EmployeeDAO {
         List<Employee> employees = query.getResultList();
         return employees;
     }
+
+    @Override
+    public Employee findById(int id) {
+        Employee employee = entityManager.find(Employee.class,id);
+        return employee;
+    }
+
+    @Override
+    public Employee save(Employee employee) {
+        Employee savedEmployee = entityManager.merge(employee);
+        return savedEmployee;
+    }
+
+    @Override
+    public void deleteById(int id) {
+        Employee employee = findById(id);
+        entityManager.remove(employee);
+    }
+
 
 }
